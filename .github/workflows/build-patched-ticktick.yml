@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       app_url:
-        description: "URL to the official TickTick Setup executable. You can find the latest version from https://ticktick.com/download/windows"
-        default: "https://download.ticktick.app/download/win64/tick_win_setup_release_x64_8070.exe"
+        description: "Direct URL to your original TickTick.exe file"
         required: true
         type: string
 
@@ -30,25 +29,10 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Download TickTick Setup
-        shell: pwsh
+        shell: pwsh.exe
         run: |
-          Write-Host "Downloading TickTick Setup from ${{ inputs.app_url }}..."
-          Invoke-WebRequest -Uri "${{ inputs.app_url }}" -OutFile "TickTick_Setup.exe"
-
-      - name: Extract TickTick
-        shell: pwsh
-        run: |
-          Write-Host "Extracting TickTick silently using 7z..."
-          # Many setup files (like NSIS) can be extracted directly by 7-zip avoiding installer hangs
-          7z e TickTick_Setup.exe -r TickTick.exe -o"." -y
-          
-          if (-not (Test-Path "TickTick.exe")) {
-            Write-Error "TickTick.exe not found! Extraction may have failed."
-            exit 1
-          }
-          
-          Write-Host "Successfully extracted TickTick.exe"
-
+          Write-Host "Downloading TickTick.exe from ${{ inputs.app_url }}..."
+          Invoke-WebRequest -Uri "${{ inputs.app_url }}" -OutFile "
       - name: Run Patcher
         # We can just build and run directly via dotnet run
         run: dotnet run -- "TickTick.exe"
