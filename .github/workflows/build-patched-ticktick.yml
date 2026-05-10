@@ -29,10 +29,11 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Download TickTick Setup
-        shell: pwsh.exe
+        shell: pwsh
         run: |
-          Write-Host "Downloading TickTick.exe from ${{ inputs.app_url }}..."
-          Invoke-WebRequest -Uri "${{ inputs.app_url }}" -OutFile "
+          Write-Host "Downloading target file from ${{ inputs.app_url }}..."
+          Invoke-WebRequest -Uri "${{ inputs.app_url }}" -OutFile "TickTick.exe"
+
       - name: Run Patcher
         # We can just build and run directly via dotnet run
         run: dotnet run -- "TickTick.exe"
